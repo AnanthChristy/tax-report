@@ -1,0 +1,73 @@
+//default scripts
+var sccScriptDictionary = [];
+/*
+sccScriptDictionary["bing"] = {
+    url: "http://www.bing.com/api/maps/mapcontrol?callback=sccProvisionBing",
+    apikey: "AlY71EUJXiE_HQrp3IxBbO7Ip1CsJd-lB2Na7x0BxOH0oPgx32wVLbcAedUFIC40",
+    containerId: "scc-bing-map-container",
+    obj: null,
+    loaded: false,
+    top: null
+};
+*/
+sccScriptDictionary["distcoords"] =
+{
+    url: "/Style Library/SCCGOV/JavaScript/Common/districtCoords.js",
+    apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}
+
+sccScriptDictionary["dcoords"] =
+{
+    url: "/Style Library/SCCGOV/JavaScript/Common/dCoords.js",
+    apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}
+
+sccScriptDictionary["googleapis"] =
+{
+    url: "//maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=places",
+    apikey: googleMapsAPIKey,
+    //apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}
+
+sccScriptDictionary["sccgovdirections"] =
+{
+    url: "/Style Library/SCCGOV/JavaScript/Common/sccgovdirections.min.js",
+    apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}
+
+sccScriptDictionary["sccgovparkfinder"] =
+{
+    url: "/Style Library/SCCGOV/JavaScript/TEMPLATE7/sccparkfinder.js",
+    apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}
+
+
+sccScriptDictionary["sccparkinfo"] =
+{
+    url: "/Style Library/SCCGOV/JavaScript/TEMPLATE7/sccparkinfo.js",
+    apikey: null,
+    containerId: null,
+    obj: null,
+    loaded: false,
+    top: null
+}

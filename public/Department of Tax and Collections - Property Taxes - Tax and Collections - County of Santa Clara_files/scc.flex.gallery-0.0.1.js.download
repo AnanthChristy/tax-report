@@ -1,0 +1,553 @@
+var resizeTimer;
+
+var sccFlexGalleries = [];
+
+function sccFlexGallerySelectImageResolution(galleryKey, gallery)
+{
+	var windowWidth = $(window).width();
+	
+	var targetResolution = gallery.currentResolution;
+	
+	Object.keys(gallery.resolutions).forEach(function(key)
+	{
+		var resolution = gallery.resolutions[key];
+	
+		if (windowWidth >= resolution.min && windowWidth <= resolution.max)
+		{
+			targetResolution = key;
+		}	
+	});
+	
+	if (gallery.currentResolution != targetResolution)
+	{
+        // hide the old sentinel
+	    $("#" + galleryKey + gallery.currentResolution + "Sentinel").hide();
+        // set the current to the new
+	    gallery.currentResolution = targetResolution;
+        // show the new sentinel
+	    $("#" + galleryKey + gallery.currentResolution + "Sentinel").css("display", "block");
+	}
+}
+
+function sccFlexGalleryCreateSentinelImage(r, g, b, a, width, height)
+{
+	var canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+	
+	var ctx = canvas.getContext("2d");
+	ctx.fillStyle = "rgba(" + [r,g,b,a].join() + ")";
+	ctx.fillRect(0, 0, width, height);
+
+	var base64 = canvas.toDataURL();
+	
+	return base64;
+}
+
+function isInt(value)
+{
+	if (isNaN(value))
+	{
+		return false;
+	}
+	
+	var x = parseFloat(value);
+	
+	return (x | 0) === x;
+}
+
+function sccFlexGalleryGetLowestResolutionMultiplier(targetAspect, startingMultiplier)
+{
+	var pResult = targetAspect * startingMultiplier;
+	
+	if (isInt(pResult) == true)
+	{
+		return startingMultiplier;
+	}
+	
+	return sccFlexGalleryGetLowestResolutionMultiplier(targetAspect, startingMultiplier + 1);
+}
+
+function sccFlexGalleryProvisionSwipe(containerId)
+{
+	var swipeElement = document.getElementById(containerId);
+	
+	if (swipeElement != undefined && swipeElement != null)
+	{
+		swipeElement.addEventListener("touchstart",function(event)
+		{
+		    var gal = sccFlexGalleries[containerId];
+
+			if (event.touches.length === 1)
+			{
+				//just one finger touched
+				gal.startingSwipePositionX = event.touches.item(0).clientX;
+			}
+			else
+			{
+				//a second finger hit the screen, abort the touch
+			    gal.startingSwipePositionX = null;
+			}
+		});
+		
+		swipeElement.addEventListener("touchend",function(event)
+		{
+		    var gal = sccFlexGalleries[containerId];
+
+			if (gal.startingSwipePositionX)
+			{
+				//the only finger that hit the screen left it
+				var end = event.changedTouches.item(0).clientX;
+                
+				if (end > gal.startingSwipePositionX + gal.minimumSwipeWidth)
+				{
+				    sccFlexGalleryRenderImage(containerId, (gal.currentIndex - 1), false, false);
+				    //a left -> right swipe
+				}
+				
+				if (end < gal.startingSwipePositionX - gal.minimumSwipeWidth)
+				{
+				    sccFlexGalleryRenderImage(containerId, (gal.currentIndex + 1), false, false);
+					//a right -> left swipe
+				}
+			}
+		});
+	}	
+}
+
+function sccFlexGalleryProvisionSentinels(galleryKey, gallery, resolutionKey)
+{
+    var resolution = gallery.resolutions[resolutionKey];
+    
+    var sentinelWidth = 0;
+    var sentinelHeight = 0;
+
+    if (resolution.width >= resolution.height) {
+        var wAspect = resolution.width / resolution.height;
+        sentinelWidth = wAspect;
+        sentinelHeight = 1;
+
+        if (isInt(sentinelWidth) == false) {
+            var wMultiplier = sccFlexGalleryGetLowestResolutionMultiplier(wAspect, 2);
+            sentinelWidth = sentinelWidth * wMultiplier;
+            sentinelHeight = sentinelHeight * wMultiplier;
+        }
+    }
+    else {
+        var hAspect = resolution.height / resolution.width;
+
+        sentinelWidth = 1;
+        sentinelHeight = hAspect;
+
+        if (isInt(sentinelHeight) == false) {
+            var hMultiplier = sccFlexGalleryGetLowestResolutionMultiplier(hAspect, 2);
+
+            sentinelWidth = sentinelWidth * hMultiplier;
+            sentinelHeight = sentinelHeight * hMultiplier;
+        }
+    }
+    
+    var sentinelImageHtml = sccFlexGalleryCreateSentinelImage(0, 0, 0, 0.5, sentinelWidth, sentinelHeight);
+        
+    var sentinelHtml = "<img aria-hidden=\"true\" id=\"" + "" + galleryKey + "" + resolutionKey + "Sentinel\" alt=\"" + galleryKey + " Sentinel Image\" class=\"scc-image-gallery-sentinel-image\" src=\"" + sentinelImageHtml + "\" ";
+    
+    if (resolutionKey == gallery.currentResolution)
+    {
+        sentinelHtml = sentinelHtml + "style=\"display: block;\" ";
+    }
+    
+    sentinelHtml = sentinelHtml + "/>";
+    
+    return sentinelHtml;
+}
+
+function sccFlexGalleryHandleResize()
+{
+    Object.keys(sccFlexGalleries).forEach(function (galleryKey)
+    {
+        sccFlexGalleryRestartTimer(galleryKey);
+
+        var galleryObj = sccFlexGalleries[galleryKey];
+        
+        galleryObj.inProgress = false;
+        galleryObj.paused = false;
+        sccFlexGalleryRenderImage(galleryKey, galleryObj.currentIndex, false);
+    });
+}
+
+function sccFlexGalleryInit()
+{
+    // loop through each gallery added to the global sccFlexGalleries array
+	Object.keys(sccFlexGalleries).forEach(function(galleryKey)
+	{
+        // get the gallery object
+		var galleryObj = sccFlexGalleries[galleryKey];
+	
+		sccFlexGallerySelectImageResolution(galleryKey, galleryObj);
+
+		var imageCount = galleryObj.images.length;
+		var sentinelCaptionTitle = "";
+		var sentinelCaption = "";
+		var initialImage = null;
+		
+		for (var i = 0; i < imageCount; i++)
+		{
+		    if (i == 0)
+		    {
+		        initialImage = galleryObj.images[0];
+		    }
+		    var flexImage = galleryObj.images[i];
+
+		    if (flexImage.title.length > sentinelCaptionTitle.length)
+			{
+		        sentinelCaptionTitle = flexImage.title;
+			}
+		
+		    if (flexImage.caption.length > sentinelCaption.length)
+			{
+		        sentinelCaption = flexImage.caption;
+			}
+		}
+	
+		var initialHtml = [];
+
+		var newWindowHtml = "";
+		if (initialImage.newWindow)
+		{
+		    newWindowHtml = "target=\"_blank\"";
+		}
+		
+		var sentinelHtml = "";
+	    // add each sentinel
+		Object.keys(galleryObj.resolutions).forEach(function (resolutionKey) {
+		    sentinelHtml = sentinelHtml + sccFlexGalleryProvisionSentinels(galleryKey, galleryObj, resolutionKey);
+		});
+
+		initialHtml.push("<div id=\"" + galleryKey + "Body\" class=\"scc-image-gallery-body\">" + sentinelHtml + "<a id=\"" + galleryKey + "0\" style=\"position: absolute; top: 0px; left: 0px; display: block; z-index: 96\" href=\"" + initialImage.url + "\" " + newWindowHtml + "><div id=\"" + galleryKey + "0Images\"><img id=\"" + galleryKey + "0" + galleryObj.currentResolution + "Image\" class=\"scc-flex-gallery-image\" src=\"" + initialImage.sources[galleryObj.currentResolution].url + "\" alt=\"" + initialImage.sources[galleryObj.currentResolution].alt + "\" /></div><div id=\"" + galleryKey + "0Caption\" class=\"scc-gallery-caption\"><h4>" + initialImage.title + "</h4><p>" + initialImage.caption + "</p></div></a><div class=\"scc-gallery-caption-sentinel scc-gallery-caption\"><h4>" + sentinelCaptionTitle + "</h4><p>" + sentinelCaption + "</p></div></div>");
+
+		if (imageCount != 1) 
+		{
+		    initialHtml.push("<a href=\"javascript:sccFlexGalleryClickEvent('next', '" + galleryKey + "', -1);\" class=\"scc-gallery-arrow scc-gallery-previous-arrow\"><span class=\"sccgov-hidden\">Previous Image</a>");
+		    initialHtml.push("<a href=\"javascript:sccFlexGalleryClickEvent('next', '" + galleryKey + "', 1);\" class=\"scc-gallery-arrow scc-gallery-next-arrow\"><span class=\"sccgov-hidden\">Next Image</span></a>");
+		}
+		
+		if (galleryObj.paging == true && imageCount != 1)
+		{
+			var pagerLinks = [];
+			
+			for (var i = 0; i < imageCount; i++)
+			{
+				var pagerClass = "";
+				
+				if (i == 0)
+				{
+					pagerClass = " class=\"scc-gallery-active\"";
+				}
+				
+				pagerLinks.push("<a id=\"" + galleryKey + i + "Pager\"" + pagerClass + " href=\"javascript:sccFlexGalleryClickEvent('specific', '" + galleryKey + "', " + i + ");\"><span class=\"sccgov-hidden\">•</span></a>");
+			}
+			
+			initialHtml.push("<div id=\"" + galleryKey + "Footer\" class=\"scc-image-gallery-footer\">" + pagerLinks.join("") + "</div>");
+		}			
+		
+		initialImage.loaded = true;
+		initialImage.sources[galleryObj.currentResolution].loaded = true;
+		
+		$("#" + galleryKey).html(initialHtml);
+		
+		sccFlexGalleryProvisionSwipe(galleryKey);
+		
+		$("#" + galleryKey).hover(function ()
+		{
+		    galleryObj.paused = true;
+		}, function() 
+		{
+		    galleryObj.paused = false;
+		});
+		
+		galleryObj.timer = setInterval(function () {
+		    sccFlexGalleryAutoAnimate(galleryKey);
+		}, galleryObj.transition);
+	});
+
+    // trigger sentinel refresh on window resize
+	$(window).on('resize', function (e)
+	{
+	    clearTimeout(resizeTimer);
+
+	    // pause all of them on resize
+	    Object.keys(sccFlexGalleries).forEach(function (galleryKey) {
+	        var galleryObj = sccFlexGalleries[galleryKey];
+            // going to pause and resize it
+	        galleryObj.paused = true;
+	        // remove the style from all the images so that you don't see anything until it's done
+	        $("#" + galleryKey + " .scc-flex-gallery-image").css("display", "none");
+	        sccFlexGalleryStopTimer(galleryKey);
+	    });
+	    
+	    resizeTimer = setTimeout(function () {
+	        // Run code here, resizing has "stopped"
+	        sccFlexGalleryHandleResize();
+	    }, 500);
+
+	});
+}
+
+function sccFlexGalleryStopTimer(key)
+{
+	clearInterval(sccFlexGalleries[key].timer);
+}
+
+function sccFlexGalleryRestartTimer(key)
+{
+	var gallery = sccFlexGalleries[key];
+	
+	gallery.timer = setInterval(function()
+	{
+		sccFlexGalleryAutoAnimate(key);
+	}, gallery.transition);
+}
+
+function sccFlexGalleryClickEvent(eventType, key, num)
+{
+    sccFlexGalleryStopTimer(key);
+
+    var gal = sccFlexGalleries[key];
+    var previousPauseState = gal.paused;
+    // override the pause
+    gal.paused = false;
+
+    switch (eventType)
+    {
+        case "next":
+            var nextIndex = gal.currentIndex + (num);
+            sccFlexGalleryRenderImage(key, nextIndex, false);
+            break;
+        case "specific":
+            sccFlexGalleryRenderImage(key, num, false);
+            break;
+    }
+
+    // restore the state
+    gal.paused = previousPauseState;
+
+    sccFlexGalleryRestartTimer(key);
+}
+
+function sccFlexGalleryRenderImage(key, nextIndex, reverse)
+{
+	var gallery = sccFlexGalleries[key];
+    
+    // save previous resolution
+	var previousResolution = gallery.currentResolution;
+
+    // get the current resolution
+	sccFlexGallerySelectImageResolution(key, gallery);
+
+    // if it changed, indicate that
+	var resolutionChanged = false;
+	if (gallery.currentResolution != previousResolution)
+	{
+	    resolutionChanged = true;
+	}
+
+	if ((gallery.inProgress == false && gallery.paused == false) || resolutionChanged)
+	{
+		gallery.inProgress = true;
+		
+		var index = gallery.currentIndex;
+		
+		var containerWidth = $("#" + key).width();
+			
+		// need to load in the next image assuming it hasn't been loaded already
+		
+		var galleryLength = gallery.images.length;
+		
+		if (nextIndex >= galleryLength) {
+		    nextIndex = 0;
+		}
+
+		// we're skipping to the last one
+		if (nextIndex < 0) {
+		    nextIndex = gallery.images.length - 1;
+		}
+        	
+		sccFlexGalleryRenderPager(key, nextIndex);
+	
+		var nextId = key + "" + nextIndex;
+
+		var nextImage = gallery.images[nextIndex];
+				
+		// we're not going to add it unless it's not loaded
+		if (nextImage.loaded == false)
+		{
+			var imageOutput = [];
+			
+			var opacity = 1;
+			if (gallery.animation == "fade")
+			{
+				containerWidth = 0;
+				opacity = 0;
+			}
+
+			var newWindowHtml = "";
+			if (nextImage.newWindow) {
+			    newWindowHtml = "target=\"_blank\"";
+			}
+							
+			imageOutput.push("<a id=\"" + nextId + "\" style=\"position: absolute; opacity: " + opacity + "; top: 0px; left: " + (containerWidth) + "px; display: block; z-index: 96\" href=\"" + nextImage.url + "\" " + newWindowHtml + "><div id=\"" + nextId + "Images\"><img id=\"" + nextId + gallery.currentResolution + "Image\" class=\"scc-flex-gallery-image\" src=\"" + nextImage.sources[gallery.currentResolution].url + "\" alt=\"" + nextImage.sources[gallery.currentResolution].alt + "\" /></div><div id=\"" + nextId + "Caption\" class=\"scc-gallery-caption\"><h4>" + nextImage.title + "</h4><p>" + nextImage.caption + "</p></div></a>");
+	
+			imageOutput.join("");
+		
+			$("#" + key + "Body").append(imageOutput);
+			
+			nextImage.loaded = true;
+			
+			nextImage.sources[gallery.currentResolution].loaded = true;
+		}
+		else
+		{
+		    if (nextImage.sources[gallery.currentResolution].loaded == false)
+			{
+		        $("#" + nextId + "Images").append("<img id=\"" + nextId + gallery.currentResolution + "Image\" class=\"scc-flex-gallery-image\" src=\"" + nextImage.sources[gallery.currentResolution].url + "\" alt=\"" + nextImage.sources[gallery.currentResolution].alt + "\" />");
+		        nextImage.sources[gallery.currentResolution].loaded = true;
+			}
+		}
+
+		var nextImageElement = $("#" + nextId + gallery.currentResolution + "Image");
+
+		if (!nextImageElement.prop("complete"))
+		{
+			nextImageElement.on("load", function()
+			{
+			    nextImage.sources[gallery.currentResolution].loaded = true;
+				
+				sccFlexGalleryLoadNextImage(gallery, key, index, nextId, nextIndex, containerWidth, reverse)
+				
+			});
+		}
+		else
+		{
+		  sccFlexGalleryLoadNextImage(gallery, key, index, nextId, nextIndex, containerWidth, reverse);
+		}
+	}
+}
+
+function sccFlexGalleryRenderPager(key, nextIndex)
+{
+	$("#" + key + "Footer a").removeClass("scc-gallery-active");
+	$("#" + key + nextIndex + "Pager").addClass("scc-gallery-active");
+}
+
+function sccFlexGalleryAutoAnimate(key)
+{
+	var gallery = sccFlexGalleries[key];
+	var nextIndex = gallery.currentIndex + 1;
+	sccFlexGalleryRenderImage(key, nextIndex, false, false);
+}
+
+function sccFlexGalleryHideCurrentImage(gallery, key, index, containerWidth, reverse)
+{
+	// this needs to handle different types of animation
+	var imagePosition = $("#" + key + "" + index).position().left;
+
+	var currentImageTargetPosition = containerWidth;
+	
+	if (reverse == false)
+	{
+		currentImageTargetPosition = "-=" + currentImageTargetPosition;
+	}
+
+	$("#" + key + "" + index).animate(
+	{
+		left: currentImageTargetPosition
+	}, gallery.speed, function() {
+		$("#" + key + "" + index).hide();
+	});
+}
+
+function sccFlexGalleryLoadNextImage(gallery, key, index, nextId, nextIndex, containerWidth, reverse)
+{
+    switch (gallery.animation) {
+        case "scrollHorz":
+            if (index != nextIndex)
+            {
+                sccFlexGalleryHideCurrentImage(gallery, key, index, containerWidth, reverse);
+            }
+
+            // hide all of the images
+            $("#" + nextId + "Images > img").hide();
+
+            // show the next one
+            $("#" + nextId + gallery.currentResolution + "Image").css("display", "block");
+
+            var nextImagePosition = containerWidth + "px";
+
+            if (reverse == true) {
+                nextImagePosition = "-" + nextImagePosition;
+            }
+
+            $("#" + nextId).css("left", nextImagePosition);
+
+            $("#" + nextId).css("display", "block");
+
+            var nextImageTargetPosition = containerWidth;
+
+            if (reverse == false) {
+                nextImageTargetPosition = "-=" + nextImageTargetPosition;
+            }
+            else {
+                nextImageTargetPosition = "0";
+            }
+            
+            $("#" + nextId).animate(
+			{
+			    left: nextImageTargetPosition
+			}, gallery.speed, function () {
+			    gallery.inProgress = false;
+			    gallery.currentIndex = nextIndex;
+			});
+            
+            break;
+        case "fade":
+            // hide all of the images
+            $("#" + nextId + "Images > img").hide();
+
+            // show the next one
+            $("#" + nextId + gallery.currentResolution + "Image").css("display", "block");
+
+            $("#" + key + "" + index).css("z-index", 95);
+            $("#" + nextId).css("z-index", 96);
+
+            if (index == nextIndex)
+            {
+                $("#" + nextId).css("opacity", "0");
+
+                $("#" + nextId).animate(
+                {
+                    opacity: 1
+                }, gallery.speed, function () {
+                    gallery.inProgress = false;
+                    gallery.currentIndex = nextIndex;
+                });
+            }
+            else
+            {
+                $("#" + key + "" + index).animate(
+			    {
+			        opacity: 0
+			    }, gallery.speed, function () {
+			    });
+
+                $("#" + nextId).animate(
+                {
+                    opacity: 1
+                }, gallery.speed, function () {
+                    gallery.inProgress = false;
+                    gallery.currentIndex = nextIndex;
+                });
+            }
+            
+            break;
+    }
+}
