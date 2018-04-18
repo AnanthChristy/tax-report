@@ -436,10 +436,37 @@ Storage of contact information, including but not limited to names, telephone nu
 <!-- </div> -->
 
 
-<div style="width: 50%;float:right;">
+
+    <div style="width:50%;float: left;">
+   
+
+        <form id = "foo" > <!--- Subscription form  starts here -->
+            <P> <strong> New Subscribers register here</strong></P>
+                <label>Email Address <span class="req asterisk">*</span></label></br>
+                <input type="email" autocapitalize="off" autocorrect="off" name="email" id="email" size="25" value="">     
+            <p>The Report will be available in Plain-text(.txt file) format. </br>Multiple reports will be zipped(.zip folder) and available for download.</p>
+                <button type="submit" name="submit">Subscribe to list</button>
+        </form><!--- Subscription form ends here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+        <script src='google-sheet.js'></script>
+
+        <script>
+        $(document).ajaxSuccess(function(){
+            alert("You are now subscribed. Please check your email for the access code. It might take a minute!");
+
+
+
+        });
+        </script>
+
+    </div>
+
+
+    <div style="width: 50%;float:right;">
     
-    <!-- Returning users-->
-    <form id ="downloads"> <!--- Downloads form  starts here -->
+        <!-- Returning users-->
+        <form id ="downloads"> <!--- Downloads form  starts here -->
 
             <p><strong>Returning Users get your download link here</strong></p>
                 <label>Email Address <span class="req asterisk">*</span></label></br>
@@ -448,45 +475,121 @@ Storage of contact information, including but not limited to names, telephone nu
                     <input type="text" autocapitalize="off" autocorrect="off" name="code" id="code" size="10" value="">
             <p>The Reports are updated everyday. You will be able to download the files here upon successful validation.</p>
                     <button type="submit" class="btn btn-info" data-toggle="collapse" data-target="#files" name="submit">Get Master files</button>
-    </form>
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Custom Theme JavaScript -->
-    <script src='google-sheet.js'></script>
-
-</div>
-
-<form id = "foo" > <!--- Subscription form  starts here -->
-            <P> <strong> New Subscribers register here</strong></P>
-                <label>Email Address <span class="req asterisk">*</span></label></br>
-                <input type="email" autocapitalize="off" autocorrect="off" name="email" id="email" size="25" value="">     
-            <p>The Report will be available in Plain-text(.txt file) format. </br>Multiple reports will be zipped(.zip folder) and available for download.</p>
-                <button type="submit" name="submit">Subscribe to list</button>
-        </form><!--- Subscription form ends here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Custom Theme JavaScript -->
-    <script src='google-sheet.js'></script>
-
-    <script>
-    $(document).ajaxSuccess(function(){
-        alert("You are now subscribed. Please check your email for the access code. It might take a minute!");
-        window.location.href = "PropertyTaxReportsDup.html";
-
-
-    });
-
-
-    </script>
+        </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <!-- Custom Theme JavaScript -->
+        <script src='google-sheet.js'></script>
+        <script>
+        $(document).ajaxSuccess(function(){
+            alert("Combination valid!");
+            myFunction();
 
 
 
+        });
 
 
-
+        </script>
+    </div>
 
 
 
 
 </div>
+
+<script>
+
+function myFunction() {
+    var x = document.getElementById("files");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<div style="clear:both;">
+    </br>
+    </br>
+    </br>
+</div>
+
+<div id="files" class="collapse" style="clear:both;text-align:left;border-top: 1px solid black;display: none;">
+<h3 align="center" id="date"> </h3>
+<script type="text/javascript">
+    n= new Date();
+    document.getElementById("date").innerHTML = n.toDateString();
+</script>
+<h3 align="center">Property Tax Reports</h3>
+<table align="center">
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Cumulative_Secured_Taxes_Receivable_Update.txt</td>
+        <td>161 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FCumulative%5FSecured%5FTaxes%5FReceivable%5FUpdate%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Redemption_Abstracts.txt</td>
+        <td>4.14 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FAbstracts%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Redemption_Details.txt</td>
+        <td>3.36 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FDetails%2Etxt" download>Download</a></td>    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Redemption_Redeemed.txt</td>
+        <td>2.59 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FRedeemed%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Secured_Taxes_Extended_With_Situs.txt</td>
+        <td>540 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FExtended%5FWith%5FSitus%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Secured_Taxes_Receivable.txt</td>
+        <td>167 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FReceivable%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Special_Assessments.txt</td>
+        <td>534 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSpecial%5FAssessments%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Supplemental_Details.txt</td>
+        <td>83.4 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSupplemental%5FDetails%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">MF_Unsecured.txt</td>
+        <td>694 MB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FUnsecured%2Etxt" download>Download</a></td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;"></td>
+        <td> </td>
+        <td> </td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;"></td>
+        <td> </td>
+        <td> </td>
+    </tr>
+    <tr>
+        <td style="padding:0 15px 0 15px;">Download all files(.zip)</td>
+        <td>2.13 GB</td>
+        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FCompressed%2Ezip" download>Download</a></td>
+    </tr>
+
+
+
+</table>
+    
+
+</div>
+<!-- <iframe width="500" height="200" frameborder="0" scrolling="no" src="https://sccconnect-my.sharepoint.com/:t:/r/personal/ananth_george_fin_sccgov_org/Documents/Property%20Tax%20reports(Master%20Files)/20180225/MF_Cumulative_Secured_Taxes_Receivable_Update.txt?csf=1&e=ipfXgT&action=embedview&wdDownloadButton=True"/>
+ -->
 
 <!-- 
 
@@ -606,7 +709,12 @@ Storage of contact information, including but not limited to names, telephone nu
                 </div>
             </div>
         </div>
+
+
         <div id="scc-portal-article-footer">
+
+                        
+        
             <div id="scc-portal-article-modified-container">Last updated: 2/23/2018 2:23 PM</div>
 			<div id="sccgov_page_body_text_reportaproblem_container">
 				<!--<img src="/Style Library/SCCGOV/Images/TEMPLATE0/BLUE/sccgov_page_link_bullet_small.gif" alt="" />-->
