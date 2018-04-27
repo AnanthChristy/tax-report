@@ -468,7 +468,7 @@ Storage of contact information, including but not limited to names, telephone nu
         <!-- Returning users-->
         <form id ="downloads"> <!--- Downloads form  starts here -->
 
-            <p><strong>Returning Users get your download link here</strong></p>
+            <p><strong>Returning Users get your master files here</strong></p>
                 <label>Email Address <span class="req asterisk">*</span></label></br>
                     <input type="email" autocapitalize="off" autocorrect="off" name="email" id="email" size="25" value=""></br></br>
                 <label>Access code <span class="req asterisk">*</span></label></br>
@@ -533,7 +533,7 @@ function validate(frm)
   }
   if(!SomeChecked)
   {
-      alert("Please select atleast one track");
+      alert("Please select atleast one file");
   }
   return false;
 }
@@ -542,6 +542,7 @@ function validate(frm)
 
 <form method="post" onsubmit="validate(this)">
 <div id="files" class="collapse" style="clear:both;text-align:left;border-top: 1px solid black;display: block;">
+<p>*Unpaid versions will be altered to remove confidential information.</p>
 <h3 align="center" id="date"> </h3>
 <script type="text/javascript">
     n= new Date();
@@ -550,93 +551,115 @@ function validate(frm)
 <h3 align="center">Property Tax Reports</h3>
 <table align="center">
     <tr>
+        <th>Select</th>
+        <th>Status</th>
+        <!--<th>Altered</th>-->
+        <th  style="padding:0 15px 0 15px;">File name</th>
+        <th>File size</th>
+    </tr>
+    <tr>
         <td><input type="checkbox" id="file_0" name="files"></td>
-        <td>Unpaid</td>
+        <td>Unpaid*</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">Download all files(.zip)</td>
         <td>148 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FCompressed%2Ezip" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FCompressed%2Ezip" download>Download</a></td>-->
     </tr>
     <tr>
         <td style="padding:0 15px 0 15px;"></td>
         <td> </td>
         <td> </td>
+        <td> </td>
+        <td> </td>
     </tr>
     <tr>
         <td style="padding:0 15px 0 15px;"></td>
+        <td> </td>
+        <td> </td>
         <td> </td>
         <td> </td>
     </tr>
     <tr>
         <td><input type="checkbox" id="file_1" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Cumulative_Secured_Taxes_Receivable_Update.txt</td>
         <td>161 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FCumulative%5FSecured%5FTaxes%5FReceivable%5FUpdate%2Etxt" download>Download</a></td>
+        <!--<td style="display:hidden"><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FCumulative%5FSecured%5FTaxes%5FReceivable%5FUpdate%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_2" name="files"></td>
-        <td>Unpaid</td>
+        <td>Unpaid*</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Redemption_Abstracts.txt</td>
         <td>4.14 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FAbstracts%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FAbstracts%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_3" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Redemption_Details.txt</td>
         <td>3.36 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FDetails%2Etxt" download>Download</a></td>    </tr>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FDetails%2Etxt" download>Download</a></td>-->    </tr>
     <tr>
         <td><input type="checkbox" id="file_4" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Redemption_Redeemed.txt</td>
         <td>2.59 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FRedeemed%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FRedemption%5FRedeemed%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_5" name="files"></td>
-        <td>Unpaid</td>
+        <td>Unpaid*</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Secured_Taxes_Extended_With_Situs.txt</td>
         <td>540 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FExtended%5FWith%5FSitus%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FExtended%5FWith%5FSitus%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_6" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Secured_Taxes_Receivable.txt</td>
         <td>167 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FReceivable%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSecured%5FTaxes%5FReceivable%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_7" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Special_Assessments.txt</td>
         <td>534 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSpecial%5FAssessments%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSpecial%5FAssessments%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_8" name="files"></td>
-        <td>Unpaid</td>
+        <td>Unpaid*</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Supplemental_Details.txt</td>
         <td>83.4 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSupplemental%5FDetails%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FSupplemental%5FDetails%2Etxt" download>Download</a></td>-->
     </tr>
     <tr>
         <td><input type="checkbox" id="file_9" name="files"></td>
         <td>Paid</td>
+        <!--<td><input type="radio" /> </td>-->
         <td style="padding:0 15px 0 15px;">MF_Unsecured.txt</td>
         <td>694 MB</td>
-        <td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FUnsecured%2Etxt" download>Download</a></td>
+        <!--<td><a href="https://sccconnect-my.sharepoint.com/personal/ananth_george_fin_sccgov_org/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Fananth%5Fgeorge%5Ffin%5Fsccgov%5Forg%2FDocuments%2FProperty%20Tax%20reports%28Master%20Files%29%2F20180225%2FMF%5FUnsecured%2Etxt" download>Download</a></td>-->
     </tr>
 
 
 
 </table>
-<center><input type="submit" value="Download" ></center>
+<p><center><input type="submit" value="Download" ></center></p>
     
 
 </div>
 </form>
+<p style="text-align: right"><b>> FAQ's<b></p>
 <!-- <iframe width="500" height="200" frameborder="0" scrolling="no" src="https://sccconnect-my.sharepoint.com/:t:/r/personal/ananth_george_fin_sccgov_org/Documents/Property%20Tax%20reports(Master%20Files)/20180225/MF_Cumulative_Secured_Taxes_Receivable_Update.txt?csf=1&e=ipfXgT&action=embedview&wdDownloadButton=True"/>
  -->
 
@@ -764,7 +787,7 @@ function validate(frm)
 
                         
         
-            <div id="scc-portal-article-modified-container">Last updated: 2/23/2018 2:23 PM</div>
+            <!--<div id="scc-portal-article-modified-container">Last updated: 2/23/2018 2:23 PM</div>-->
 			<div id="sccgov_page_body_text_reportaproblem_container">
 				<!--<img src="/Style Library/SCCGOV/Images/TEMPLATE0/BLUE/sccgov_page_link_bullet_small.gif" alt="" />-->
                 <a href="javascript:sccgovShowHideReportIssue();">Report a problem with this page</a>
